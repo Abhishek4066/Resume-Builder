@@ -40,8 +40,9 @@ public class HomeController {
         // Do something with userId, e.g., fetch user details from the database
         // and add them to the model
         model.addAttribute("userId", userId);
-        
-        return "profile";
+
+        return "profile-templates/1/index";
     }
+
 
 }
