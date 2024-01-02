@@ -6,9 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 public class HomeController {
 
     @GetMapping("/")
@@ -33,4 +34,14 @@ public class HomeController {
         model.addAttribute("error", ex.getMessage());
         return "access-denied";
     }
+    
+    @GetMapping("/view/{userId}")
+    public String view(@PathVariable String userId, Model model) {
+        // Do something with userId, e.g., fetch user details from the database
+        // and add them to the model
+        model.addAttribute("userId", userId);
+        
+        return "profile";
+    }
+
 }

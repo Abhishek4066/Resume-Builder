@@ -24,17 +24,17 @@ public class SecurityConfiguration {
 	}
 
 	@Bean
-    SecurityFilterChain chain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/edit").authenticated()
-                        .requestMatchers("/*").permitAll())
-                .httpBasic(Customizer.withDefaults())
-                .exceptionHandling(exceptionHandling ->
-                        exceptionHandling.accessDeniedPage("/access-denied"));
+	SecurityFilterChain chain(HttpSecurity httpSecurity) throws Exception {
+	    httpSecurity.csrf(csrf -> csrf.disable())
+	            .authorizeHttpRequests((authorize) -> authorize
+	                    .requestMatchers("/edit").authenticated()
+	                    .anyRequest().permitAll())
+	            .httpBasic(Customizer.withDefaults());
 
-        return httpSecurity.build();
-    }
+	    return httpSecurity.build();
+	}
+
+
 
 	@Bean
 	public UserDetailsService userDetailsService() {
