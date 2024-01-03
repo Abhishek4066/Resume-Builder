@@ -1,5 +1,7 @@
 package com.resume.ResumeBuilder.controller;
 
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.resume.ResumeBuilder.model.Experience;
 import com.resume.ResumeBuilder.model.UserProfile;
 import com.resume.ResumeBuilder.repository.UserProfileRepository;
 
@@ -23,7 +26,42 @@ public class HomeController {
 
     @GetMapping("/")
     public String home() {
-        return "index";
+    	
+    	Optional<UserProfile> profile1Optional = profileRepository.findByUserName("one");
+    	profile1Optional.orElseThrow(() -> new RuntimeException("Not found: "));
+
+        
+        
+        UserProfile profile1 = profile1Optional.get();
+    	
+    	Experience exp1 = new Experience();
+    	exp1.setCompany("Google");
+    	exp1.setDesignation("network engineer");
+    	exp1.setId(1);
+    	exp1.setStartDate(LocalDate.of(2011, 02, 12));
+    	//exp1.setEndDate(LocalDate.of(2012, 02, 12));
+    	exp1.setCurrentJob(true);
+    	
+    	
+    	Experience exp2 = new Experience();
+    	exp2.setCompany("Amazon");
+    	exp2.setDesignation("Software engineer");
+    	exp2.setId(2);
+    	exp2.setStartDate(LocalDate.of(2015, 02, 12));
+    	exp2.setEndDate(LocalDate.of(2018, 02, 12));
+    	
+    	profile1.getJobExperience().clear();
+    	profile1.getJobExperience().add(exp1);
+    	profile1.getJobExperience().add(exp2);
+    	
+    	
+    	
+    	
+    	
+    	
+    	profileRepository.save(profile1);
+    	
+        return "profile";
     }
 
     @GetMapping("/edit")
@@ -57,6 +95,8 @@ public class HomeController {
         UserProfile userProfile = userProfileOptional.get();
         
         model.addAttribute("userProfile", userProfile);
+        
+        System.out.println(userProfile.getJobExperience());
         
         return "profile-templates/"+ userProfile.getTheme() + "/index";
     }

@@ -1,6 +1,9 @@
 package com.resume.ResumeBuilder.model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -24,7 +27,9 @@ public class Experience {
     private LocalDate startDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
-    //private boolean isCurrentJob;
+    private boolean CurrentJob;
+    private List<String> responsibilities = new ArrayList();
+    
 	public int getId() {
 		return id;
 	}
@@ -55,7 +60,32 @@ public class Experience {
 	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
+	
+	public List<String> getResponsibilities() {
+		return responsibilities;
+	}
+	public void setResponsibilities(List<String> responsibilities) {
+		this.responsibilities = responsibilities;
+	}
+	public boolean isCurrentJob() {
+		return CurrentJob;
+	}
+	public void setCurrentJob(boolean currentJob) {
+		CurrentJob = currentJob;
+	}
     
-    
+	public String getFormattedStartDate() {
+        return startDate.format(DateTimeFormatter.ofPattern("MMM yyyy -"));
+    }
+
+    public String getFormattedEndDate() {
+        return endDate.format(DateTimeFormatter.ofPattern("MMM yyyy"));
+    }
+	@Override
+	public String toString() {
+		return "Experience [id=" + id + ", company=" + company + ", designation=" + designation + ", startDate="
+				+ startDate + ", endDate=" + endDate + ", CurrentJob=" + CurrentJob + ", responsibilities="
+				+ responsibilities + "]";
+	}
 
 }
