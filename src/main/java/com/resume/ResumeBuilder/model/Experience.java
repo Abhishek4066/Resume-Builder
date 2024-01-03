@@ -27,6 +27,7 @@ public class Experience {
     private LocalDate startDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
+    
     private boolean CurrentJob;
     private List<String> responsibilities = new ArrayList();
     
@@ -87,5 +88,6 @@ public class Experience {
 				+ startDate + ", endDate=" + endDate + ", CurrentJob=" + CurrentJob + ", responsibilities="
 				+ responsibilities + "]";
 	}
+	
 
 }

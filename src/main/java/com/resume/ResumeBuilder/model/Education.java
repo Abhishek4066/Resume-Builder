@@ -24,6 +24,7 @@ public class Education {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
     private String summary;
+    private double gpa;
 
     public int getId() {
         return id;
@@ -74,10 +75,30 @@ public class Education {
     }
 
     public String getFormattedStartDate() {
-        return startDate.format(DateTimeFormatter.ofPattern("MMM yyyy"));
+        return startDate.format(DateTimeFormatter.ofPattern("MMM yyyy -"));
     }
 
     public String getFormattedEndDate() {
         return endDate.format(DateTimeFormatter.ofPattern("MMM yyyy"));
     }
+
+	public double getGpa() {
+		return gpa;
+	}
+
+	public void setGpa(double gpa) {
+		this.gpa = gpa;
+	}
+
+	@Override
+	public String toString() {
+		return "Education [id=" + id + ", college=" + college + ", qualification=" + qualification + ", startDate="
+				+ startDate + ", endDate=" + endDate + ", summary=" + summary + ", gpa=" + gpa + "]";
+	}
+
+	
+
+	
+
+	
 }

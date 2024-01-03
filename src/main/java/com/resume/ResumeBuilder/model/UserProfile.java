@@ -125,4 +125,12 @@ public class UserProfile {
 		this.educations = educations;
 	}
 
+	@Override
+	public String toString() {
+		return "UserProfile [id=" + id + ", userName=" + userName + ", theme=" + theme + ", summary=" + summary
+				+ ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", phone=" + phone
+				+ ", designation=" + designation + ", jobExperience=" + jobExperience + ", educations=" + educations
+				+ "]";
+	}
+
 }

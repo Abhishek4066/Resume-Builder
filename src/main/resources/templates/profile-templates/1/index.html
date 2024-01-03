@@ -132,13 +132,15 @@
 									class="job">
 									<h2 th:text="${experience.company}"></h2>
 									<h3 th:text="${experience.designation}"></h3>
-									 <h4 ><span th:text= "${experience.FormattedStartDate}">2005</span>
-									 
-									 <span th:text="${experience.currentJob}? 'Present' : ${experience.FormattedEndDate}">2007</span></h4>
-									<p>enable optimal core competencies through
-										corporate relationships. Phosfluorescently implement worldwide
-										vortals and client-focused imperatives. Conveniently initiate
-										virtual paradigms and top-line convergence.</p>
+									<h4>
+										<span th:text="${experience.FormattedStartDate}">2005</span> <span
+											th:text="${experience.currentJob}? 'Present' : ${experience.FormattedEndDate}">2007</span>
+									</h4>
+									<ul th:each="responsibility : ${experience.responsibilities}">
+										<li th:text="${responsibility}"></li>
+									</ul>
+
+
 								</div>
 
 
@@ -155,13 +157,24 @@
 							<div class="yui-u first">
 								<h2>Education</h2>
 							</div>
-							<div class="yui-u">
-								<h2>Indiana University - Bloomington, Indiana</h2>
+							<div class="yui-u"
+								th:each="education : ${userProfile.educations}">
+								<h2>
+									
+									<span th:text="${education.college}">D D Patil College
+										of Engineering</span>
+									
+								</h2>
+									<span th:text="${education.FormattedStartDate}"></span>
+									<span th:text="${education.FormattedEndDate}"></span>
 								<h3>
-									Dual Major, Economics and English &mdash; <strong>4.0
-										GPA</strong>
+									<span th:text="${education.qualification}">Diploma</span>
+									&mdash; <strong th:text="${education.gpa}">4.0 GPA</strong> <span>cgpa</span>
 								</h3>
+								
 							</div>
+
+
 						</div>
 						<!--// .yui-gf -->
 
@@ -175,8 +188,10 @@
 
 			<div id="ft">
 				<p>
-					Jonathan Doe &mdash; <a href="mailto:name@yourdomain.com">name@yourdomain.com</a>
-					&mdash; (313) - 867-5309
+					<span th:text="${userProfile.firstName}"></span> <span
+						th:text="${userProfile.lastName}"></span> <br>
+					<span th:text="${userProfile.email}"></span></br> <span
+						th:text="${userProfile.phone}">7984133</span>
 				</p>
 			</div>
 			<!--// footer -->
