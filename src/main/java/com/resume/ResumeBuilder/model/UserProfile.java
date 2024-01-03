@@ -3,9 +3,8 @@ package com.resume.ResumeBuilder.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.annotations.Cascade;
-
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,6 +35,10 @@ public class UserProfile {
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "education_id")
 	List<Education> educations = new ArrayList<>();
+	
+	
+	@ElementCollection(targetClass=String.class)
+    List<String> skills = new ArrayList<>();
 
 	public int getId() {
 		return id;
@@ -131,6 +134,14 @@ public class UserProfile {
 				+ ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", phone=" + phone
 				+ ", designation=" + designation + ", jobExperience=" + jobExperience + ", educations=" + educations
 				+ "]";
+	}
+
+	public List<String> getSkills() {
+		return skills;
+	}
+
+	public void setSkills(List<String> skills) {
+		this.skills = skills;
 	}
 
 }

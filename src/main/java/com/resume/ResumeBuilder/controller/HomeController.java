@@ -78,6 +78,10 @@ public class HomeController {
 		profile1.getEducations().add(e1);
 		profile1.getEducations().add(e2);
 
+		profile1.getSkills().clear();
+		profile1.getSkills().add("playing football");
+		profile1.getSkills().add("swiming");
+		
 		profileRepository.save(profile1);
 
 		return "profile";
