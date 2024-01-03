@@ -1,5 +1,8 @@
 package com.resume.ResumeBuilder.controller;
 
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -9,8 +12,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.resume.ResumeBuilder.model.UserProfile;
+import com.resume.ResumeBuilder.repository.UserProfileRepository;
+
 @Controller
 public class HomeController {
+	
+	@Autowired
+	UserProfileRepository profileRepository;
 
     @GetMapping("/")
     public String home() {
@@ -18,7 +27,6 @@ public class HomeController {
     }
 
     @GetMapping("/edit")
-    @PreAuthorize("hasRole('ADMIN')")
     public String edit() {
         return "Edit";
     }
@@ -35,13 +43,22 @@ public class HomeController {
         return "access-denied";
     }
     
-    @GetMapping("/view/{userId}")
-    public String view(@PathVariable String userId, Model model) {
+    @GetMapping("/view/{userName}") //change userId to username
+    public String view(@PathVariable String userName, Model model) {
         // Do something with userId, e.g., fetch user details from the database
         // and add them to the model
-        model.addAttribute("userId", userId);
+        
+        Optional<UserProfile> userProfileOptional = profileRepository.findByUserName(userName);
+        
+        userProfileOptional.orElseThrow(() -> new RuntimeException("Not found: " + userName));
 
-        return "profile-templates/1/index";
+        model.addAttribute("userId", userName);
+        
+        UserProfile userProfile = userProfileOptional.get();
+        
+        model.addAttribute("userProfile", userProfile);
+        
+        return "profile-templates/"+ userProfile.getTheme() + "/index";
     }
 
 
