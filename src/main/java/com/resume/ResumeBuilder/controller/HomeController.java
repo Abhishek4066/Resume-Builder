@@ -29,68 +29,12 @@ public class HomeController {
 
 	@GetMapping("/")
 	public String home() {
-
-		Optional<UserProfile> profile1Optional = profileRepository.findByUserName("einstein");
-		profile1Optional.orElseThrow(() -> new RuntimeException("Not found: "));
-
-		UserProfile profile1 = profile1Optional.get();
-
-		Experience exp1 = new Experience();
-		exp1.setCompany("Google");
-		exp1.setDesignation("network engineer");
-		exp1.setId(1);
-		exp1.setStartDate(LocalDate.of(2011, 02, 12));
-		// exp1.setEndDate(LocalDate.of(2012, 02, 12));
-		exp1.setCurrentJob(true);
-		exp1.getResponsibilities().add("just started working ");
-		exp1.getResponsibilities().add("just google doc working ");
-		exp1.getResponsibilities().add("google map  working ");
-
-		Experience exp2 = new Experience();
-		exp2.setCompany("Amazon");
-		exp2.setDesignation("Software engineer");
-		exp2.setId(2);
-		exp2.setStartDate(LocalDate.of(2015, 02, 12));
-		exp2.setEndDate(LocalDate.of(2018, 02, 12));
-		exp2.getResponsibilities().add("just started amazon ");
-		exp2.getResponsibilities().add("just devilvery doc working ");
-		exp2.getResponsibilities().add("cart page  working ");
-
-		profile1.getJobExperience().clear();
-		profile1.getJobExperience().add(exp1);
-		profile1.getJobExperience().add(exp2);
-
-		Education e1 = new Education();
-		e1.setCollege("D Y Patil College of Engineering");
-		e1.setQualification("Diploma");
-		e1.setSummary("Done Diploma here");
-		e1.setStartDate(LocalDate.of(2015, 02, 12));
-		e1.setEndDate(LocalDate.of(2018, 02, 12));
-		e1.setGpa(4.3);
-
-		Education e2 = new Education();
-		e2.setCollege("MMIT");
-		e2.setQualification("Degree");
-		e2.setSummary("Done Degree here");
-		e2.setStartDate(LocalDate.of(2015, 02, 12));
-		e2.setEndDate(LocalDate.of(2018, 02, 12));
-		e2.setGpa(6.7);
-
-		profile1.getEducations().clear();
-		profile1.getEducations().add(e1);
-		profile1.getEducations().add(e2);
-
-		profile1.getSkills().clear();
-		profile1.getSkills().add("playing football");
-		profile1.getSkills().add("swiming");
-
-		profileRepository.save(profile1);
-
-		return "profile";
+		return "index";
 	}
+
 // make a post reques to add eduation so that it gets saved
 	@GetMapping("/edit")
-	public String edit(Model model, Principal principal,@RequestParam(required = false)String add) {
+	public String edit(Model model, Principal principal, @RequestParam(required = false) String add) {
 
 		String userName = principal.getName();
 
@@ -101,33 +45,33 @@ public class HomeController {
 		userProfileOptional.orElseThrow(() -> new RuntimeException("Not found: " + userName));
 
 		UserProfile userProfile = userProfileOptional.get();
-		
+
 		if ("experience".equals(add)) {
-            userProfile.getJobExperience().add(new Experience());
-           
-        } else if ("education".equals(add)) {
-            userProfile.getEducations().add(new Education());
-           
-        } else if ("skill".equals(add)) {
-            userProfile.getSkills().add("");
-        }
-		 
+			userProfile.getJobExperience().add(new Experience());
+
+		} else if ("education".equals(add)) {
+			userProfile.getEducations().add(new Education());
+
+		} else if ("skill".equals(add)) {
+			userProfile.getSkills().add("");
+		}
+
 		model.addAttribute("userProfile", userProfile);
 
 		return "profile-edit";
 	}
 
 	@PostMapping("/edit")
-    public String postEdit(Model model, Principal principal, @ModelAttribute UserProfile userProfile) {
-        String userName = principal.getName();
-        Optional<UserProfile> userProfileOptional = profileRepository.findByUserName(userName);
-        userProfileOptional.orElseThrow(() -> new RuntimeException("Not found: " + userName));
-        UserProfile savedUserProfile = userProfileOptional.get();
-        userProfile.setId(savedUserProfile.getId());
-        userProfile.setUserName(userName);
-        profileRepository.save(userProfile);
-        return "redirect:/view/"+ userName;
-    }
+	public String postEdit(Model model, Principal principal, @ModelAttribute UserProfile userProfile) {
+		String userName = principal.getName();
+		Optional<UserProfile> userProfileOptional = profileRepository.findByUserName(userName);
+		userProfileOptional.orElseThrow(() -> new RuntimeException("Not found: " + userName));
+		UserProfile savedUserProfile = userProfileOptional.get();
+		userProfile.setId(savedUserProfile.getId());
+		userProfile.setUserName(userName);
+		profileRepository.save(userProfile);
+		return "redirect:/view/" + userName;
+	}
 
 	@GetMapping("/access-denied")
 	public String accessDenied() {
@@ -142,15 +86,15 @@ public class HomeController {
 	}
 
 	@GetMapping("/view/{userName}") // change userId to username
-	public String view(@PathVariable String userName, Model model,Principal principal) {
+	public String view(@PathVariable String userName, Model model, Principal principal) {
 		// Do something with userId, e.g., fetch user details from the database
 		// and add them to the model
-		
+
 		if (principal != null && principal.getName() != "") {
-            boolean currentUsersProfile = principal.getName().equals(userName);
-            model.addAttribute("currentUsersProfile", currentUsersProfile);
-        }
-        //String userName = principal.getName();
+			boolean currentUsersProfile = principal.getName().equals(userName);
+			model.addAttribute("currentUsersProfile", currentUsersProfile);
+		}
+		// String userName = principal.getName();
 
 		Optional<UserProfile> userProfileOptional = profileRepository.findByUserName(userName);
 
@@ -165,24 +109,23 @@ public class HomeController {
 		System.out.println(userProfile.getJobExperience());
 		System.out.println(userProfile.getEducations());
 
-		return "profile-templates/"+ userProfile.getTheme() + "/index";
+		return "profile-templates/" + userProfile.getTheme() + "/index";
 	}
 
-	
 	@GetMapping("/delete")
-    public String delete(Model model, Principal principal, @RequestParam String type, @RequestParam int index) {
-        String userName = principal.getName();
-        Optional<UserProfile> userProfileOptional = profileRepository.findByUserName(userName);
-        userProfileOptional.orElseThrow(() -> new RuntimeException("Not found: " + userName));
-        UserProfile userProfile = userProfileOptional.get();
-        if ("experience".equals(type)) {
-            userProfile.getJobExperience().remove(index);
-        } else if ("education".equals(type)) {
-            userProfile.getEducations().remove(index);
-        } else if ("skill".equals(type)) {
-            userProfile.getSkills().remove(index);
-        }
-        profileRepository.save(userProfile);
-        return "redirect:/edit";
-    }
+	public String delete(Model model, Principal principal, @RequestParam String type, @RequestParam int index) {
+		String userName = principal.getName();
+		Optional<UserProfile> userProfileOptional = profileRepository.findByUserName(userName);
+		userProfileOptional.orElseThrow(() -> new RuntimeException("Not found: " + userName));
+		UserProfile userProfile = userProfileOptional.get();
+		if ("experience".equals(type)) {
+			userProfile.getJobExperience().remove(index);
+		} else if ("education".equals(type)) {
+			userProfile.getEducations().remove(index);
+		} else if ("skill".equals(type)) {
+			userProfile.getSkills().remove(index);
+		}
+		profileRepository.save(userProfile);
+		return "redirect:/edit";
+	}
 }
