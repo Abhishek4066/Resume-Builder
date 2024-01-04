@@ -9,5 +9,9 @@ import com.resume.ResumeBuilder.model.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 	Optional<User> findByUserName(String userName);
-
+	
+	
+	default void logQueries() {
+        findAll().forEach(user -> System.out.println(user.getUserName()));
+    }
 }

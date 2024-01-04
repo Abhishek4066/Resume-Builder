@@ -1,18 +1,17 @@
 package com.resume.ResumeBuilder.controller;
 
+import java.security.Principal;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.resume.ResumeBuilder.model.Education;
 import com.resume.ResumeBuilder.model.Experience;
@@ -28,7 +27,7 @@ public class HomeController {
 	@GetMapping("/")
 	public String home() {
 
-		Optional<UserProfile> profile1Optional = profileRepository.findByUserName("one");
+		Optional<UserProfile> profile1Optional = profileRepository.findByUserName("admin");
 		profile1Optional.orElseThrow(() -> new RuntimeException("Not found: "));
 
 		UserProfile profile1 = profile1Optional.get();
@@ -81,15 +80,36 @@ public class HomeController {
 		profile1.getSkills().clear();
 		profile1.getSkills().add("playing football");
 		profile1.getSkills().add("swiming");
-		
+
 		profileRepository.save(profile1);
 
 		return "profile";
 	}
 
 	@GetMapping("/edit")
-	public String edit() {
-		return "Edit";
+	public String edit(Model model, Principal principal) {
+
+		String userName = principal.getName();
+
+		model.addAttribute("userName", userName);
+
+		Optional<UserProfile> userProfileOptional = profileRepository.findByUserName(userName);
+
+		userProfileOptional.orElseThrow(() -> new RuntimeException("Not found: " + userName));
+
+		UserProfile userProfile = userProfileOptional.get();
+
+		model.addAttribute("userProfile", userProfile);
+
+		return "profile-edit";
+	}
+
+	@PostMapping("/edit")
+	public String postEdit(Model model, Principal principal) {
+
+		String userName = principal.getName();
+
+		return "redirect:/view/" + userName;
 	}
 
 	@GetMapping("/access-denied")
@@ -113,7 +133,7 @@ public class HomeController {
 
 		userProfileOptional.orElseThrow(() -> new RuntimeException("Not found: " + userName));
 
-		model.addAttribute("userId", userName);
+		model.addAttribute("userName", userName);
 
 		UserProfile userProfile = userProfileOptional.get();
 
