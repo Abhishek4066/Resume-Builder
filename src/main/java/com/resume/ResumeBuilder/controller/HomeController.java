@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -27,7 +28,7 @@ public class HomeController {
 	@GetMapping("/")
 	public String home() {
 
-		Optional<UserProfile> profile1Optional = profileRepository.findByUserName("admin");
+		Optional<UserProfile> profile1Optional = profileRepository.findByUserName("einstein");
 		profile1Optional.orElseThrow(() -> new RuntimeException("Not found: "));
 
 		UserProfile profile1 = profile1Optional.get();
@@ -105,12 +106,16 @@ public class HomeController {
 	}
 
 	@PostMapping("/edit")
-	public String postEdit(Model model, Principal principal) {
-
-		String userName = principal.getName();
-
-		return "redirect:/view/" + userName;
-	}
+    public String postEdit(Model model, Principal principal, @ModelAttribute UserProfile userProfile) {
+        String userName = principal.getName();
+        Optional<UserProfile> userProfileOptional = profileRepository.findByUserName(userName);
+        userProfileOptional.orElseThrow(() -> new RuntimeException("Not found: " + userName));
+        UserProfile savedUserProfile = userProfileOptional.get();
+        userProfile.setId(savedUserProfile.getId());
+        userProfile.setUserName(userName);
+        profileRepository.save(userProfile);
+        return "redirect:/view/"+ userName;
+    }
 
 	@GetMapping("/access-denied")
 	public String accessDenied() {
@@ -142,7 +147,7 @@ public class HomeController {
 		System.out.println(userProfile.getJobExperience());
 		System.out.println(userProfile.getEducations());
 
-		return "profile-templates/" + userProfile.getTheme() + "/index";
+		return "profile-templates/"+ userProfile.getTheme() + "/index";
 	}
 
 }
