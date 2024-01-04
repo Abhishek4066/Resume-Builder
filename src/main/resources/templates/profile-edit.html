@@ -1,22 +1,97 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Profile</title>
+<meta charset="UTF-8">
+<title>Profile</title>
 </head>
 <body>
-    <h1 th:text="${userName} + '\'s Profile'">Profile</h1>
-    
-     <form action="#" th:action="@{/edit}" th:object="${userProfile}" method="post">
-     
-     <p>First Name: <input type="text" th:field="*{firstName}"></p>
-     <p>Last Name: <input type="text" th:field="*{lastName}"></p>
-     <p>E-mail: <input type="text" th:field="*{email}"></p>
-     <p>Phone: <input type="text" th:field="*{phone}"></p>
-     <p>Designation: <input type="text" th:field="*{designation}"></p>
-     
-     
-     </form>
-    
+	<h1 th:text="${userName} + '\'s Profile'">Profile</h1>
+
+	<form action="#" th:action="@{/edit}" th:object="${userProfile}"
+		method="post">
+
+		<p>
+			First Name: <input type="text" th:field="*{firstName}">
+		</p>
+		<p>
+			Last Name: <input type="text" th:field="*{lastName}">
+		</p>
+		<p>
+			E-mail: <input type="text" th:field="*{email}">
+		</p>
+		<p>
+			Phone: <input type="text" th:field="*{phone}">
+		</p>
+		<p>
+			Designation: <input type="text" th:field="*{designation}">
+		</p>
+
+		<h2>Experience</h2>
+		<table>
+			<tr>
+				<th>Company</th>
+				<th>Designation</th>
+				<th>Start Date</th>
+				<th>End Date</th>
+				<th>Current Job</th>
+			</tr>
+			<tr th:each="experience, stat: *{jobExperience}">
+				<td><input
+					th:field="*{jobExperience[__${stat.index}__].company}"
+					placeholder="Company"></td>
+				<td><input
+					th:field="*{jobExperience[__${stat.index}__].designation}"
+					placeholder="Designation"></td>
+				<td><input type="date"
+					th:field="*{jobExperience[__${stat.index}__].startDate}"
+					placeholder="Start Date"></td>
+				<td><input type="date"
+					th:field="*{jobExperience[__${stat.index}__].endDate}"
+					placeholder="End Date"></td>
+				<td><input type="checkbox"
+					th:field="*{jobExperience[__${stat.index}__].currentJob}"></td>
+			</tr>
+		</table>
+
+
+		<h2>Education</h2>
+		<table>
+			<tr>
+				<th>College</th>
+				<th>Qualification</th>
+				<th>Start Date</th>
+				<th>End Date</th>
+				<th> GPA</th>
+			</tr>
+			<tr th:each="education, stat: *{educations}">
+				<td><input
+					th:field="*{educations[__${stat.index}__].college}"
+					placeholder="Company"></td>
+				<td><input
+					th:field="*{educations[__${stat.index}__].qualification}"
+					placeholder="Designation"></td>
+				<td><input type="date"
+					th:field="*{educations[__${stat.index}__].startDate}"
+					placeholder="Start Date"></td>
+				<td><input type="date"
+					th:field="*{educations[__${stat.index}__].endDate}"
+					placeholder="End Date"></td>
+				<td><input 
+					th:field="*{educations[__${stat.index}__].gpa}"></td>
+			</tr>
+		</table>
+		
+		
+		<h2>Skills</h2>
+		<table>
+			<tr th:each="skill,stat: *{skills}">
+				<td><input
+					th:field="*{skills[__${stat.index}__]}"
+					></td>
+			</tr>
+		</table>
+				<input type="submit">
+	</form>
+
 </body>
 </html>
