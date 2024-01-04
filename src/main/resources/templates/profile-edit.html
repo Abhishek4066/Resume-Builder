@@ -45,7 +45,11 @@
 				<th>End Date</th>
 				<th>Current Job</th>
 			</tr>
+			<p>
+				<a href="./edit?add=experience">Add Experience</a>
+			</p>
 			<tr th:each="experience, stat: *{jobExperience}">
+
 				<td><input
 					th:field="*{jobExperience[__${stat.index}__].company}"
 					placeholder="Company"></td>
@@ -60,7 +64,11 @@
 					placeholder="End Date"></td>
 				<td><input type="checkbox"
 					th:field="*{jobExperience[__${stat.index}__].currentJob}"></td>
+
+				<td><a
+					th:href="@{'/delete?type=experience&index=' + ${stat.index}}">Delete</a></td>
 			</tr>
+
 		</table>
 
 
@@ -74,6 +82,10 @@
 				<th>GPA</th>
 
 			</tr>
+			<p>
+				<a href="./edit?add=education">Add Education</a>
+			</p>
+
 			<tr th:each="education, stat: *{educations}">
 				<td><input th:field="*{educations[__${stat.index}__].college}"
 					placeholder="Company"></td>
@@ -87,14 +99,22 @@
 					th:field="*{educations[__${stat.index}__].endDate}"
 					placeholder="End Date"></td>
 				<td><input th:field="*{educations[__${stat.index}__].gpa}"></td>
-
+				<td><a
+					th:href="@{'/delete?type=education&index=' + ${stat.index}}">Delete</a></td>
 			</tr>
 		</table>
 
 
+
 		<h2>Skills</h2>
+		<p>
+			<a href="./edit?add=skill">Add Skill</a>
+		</p>
+
 		<table>
 			<tr th:each="skill,stat: *{skills}">
+				<td><a
+					th:href="@{'/delete?type=skill&index=' + ${stat.index}}">Delete</a></td>
 				<td><input th:field="*{skills[__${stat.index}__]}"></td>
 			</tr>
 		</table>

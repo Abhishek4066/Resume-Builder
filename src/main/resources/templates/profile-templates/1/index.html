@@ -26,7 +26,7 @@
 					<div class="yui-u first">
 						<h1>
 							<span th:text="${userProfile.firstName}"></span> <span
-								th:text="${userProfile.lastName}"></span>
+								th:text="${userProfile.lastName}"></span> 
 						</h1>
 						<h2 th:text="${userProfile.designation}">Web Designer,
 							Director</h2>
@@ -36,6 +36,8 @@
 						<div class="contact-info">
 							<h3>
 								<a id="pdf" href="#">Download PDF</a>
+								<h2><a
+								th:if="${currentUsersProfile}" href="/edit">Edit</a></h2>
 							</h3>
 							<h3 th:text="${userProfile.email}">name@yourdomain.com</h3>
 							<h3 th:text="${userProfile.phone}">(313) - 867-5309</h3>
@@ -147,18 +149,18 @@
 							<div class="yui-u"
 								th:each="education : ${userProfile.educations}">
 								<h2>
-									
+
 									<span th:text="${education.college}">D D Patil College
 										of Engineering</span>
-									
+
 								</h2>
-									<span th:text="${education.FormattedStartDate}"></span>
-									<span th:text="${education.FormattedEndDate}"></span>
+								<span th:text="${education.FormattedStartDate}"></span> <span
+									th:text="${education.FormattedEndDate}"></span>
 								<h3>
 									<span th:text="${education.qualification}">Diploma</span>
 									&mdash; <strong th:text="${education.gpa}">4.0 GPA</strong> <span>cgpa</span>
 								</h3>
-								
+
 							</div>
 
 
@@ -176,8 +178,8 @@
 			<div id="ft">
 				<p>
 					<span th:text="${userProfile.firstName}"></span> <span
-						th:text="${userProfile.lastName}"></span> <br>
-					<span th:text="${userProfile.email}"></span></br> <span
+						th:text="${userProfile.lastName}"></span> <br> <span
+						th:text="${userProfile.email}"></span></br> <span
 						th:text="${userProfile.phone}">7984133</span>
 				</p>
 			</div>
